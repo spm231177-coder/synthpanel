@@ -23,7 +23,7 @@ der auslösenden Stelle, sortiert nach Schwere.
 ```bash
 git clone https://github.com/spm231177-coder/synthpanel && cd synthpanel
 pip install -e .              # installiert Abhängigkeiten + den Befehl `synthpanel`
-ollama pull llama3.2:3b       # kleines Standard-Modell, läuft überall
+ollama pull qwen3.5:4b        # empfohlenes Modell — gute Balance aus Speed und Tiefe
 
 synthpanel run examples/landingpage_demo.md \
     --audience "Menschen, die sich schwer konzentrieren können" \
@@ -32,10 +32,16 @@ synthpanel run examples/landingpage_demo.md \
 
 (Ohne Installation geht auch `python -m synthpanel run …` direkt aus dem Repo.)
 
-**Modellwahl = Analysetiefe.** Default ist `llama3.2:3b` — klein, schnell, läuft überall,
-aber eher oberflächlich. Für gehaltvollere Reibung ein größeres lokales Modell
-(`--model qwen2.5:7b`) oder die Cloud (`--backend anthropic`, Claude). Das genutzte
-Modell steht im Report — keine Black Box.
+**Modellwahl = Analysetiefe.**
+
+| Modell | Wann |
+|--------|------|
+| `qwen3.5:4b` | **Empfehlung** — gute Tiefe, läuft auf 8 GB VRAM |
+| `llama3.2:3b` | Minimal-Setup, sehr schnell, eher oberflächlich |
+| `qwen2.5:7b` oder größer | Mehr Kontext, mehr Reibungs-Granularität |
+| `--backend anthropic` | Kein lokales Modell — Claude übernimmt (⚠ Token-Kosten) |
+
+Das genutzte Modell steht im Report — keine Black Box.
 
 ### So sieht der Output aus
 
