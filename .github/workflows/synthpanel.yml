@@ -1,0 +1,61 @@
+# SynthPanel im CI — „ESLint für UX-Reibung".
+# Findet bei jedem Pull Request Reibungspunkte in deinem Text und postet sie als Kommentar.
+#
+# Einrichtung:
+#   1. Repo-Secret ANTHROPIC_API_KEY setzen (CI hat kein lokales Ollama → Cloud-Backend).
+#   2. Optional Repo-Variablen: SYNTHPANEL_TARGET (zu prüfende Datei), SYNTHPANEL_AUDIENCE.
+#   3. Diese Datei nach .github/workflows/ in dein Repo kopieren.
+
+name: SynthPanel UX-Reibung
+
+on:
+  pull_request:
+    paths:
+      - "**/*.md" # passe an: welche Texte geprüft werden sollen
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  friction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: API-Key vorhanden?
+        id: key
+        run: |
+          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::ANTHROPIC_API_KEY fehlt — SynthPanel übersprungen. Secret setzen, um Reibungs-Reports als PR-Kommentar zu erhalten."
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: SynthPanel installieren
+        if: steps.key.outputs.present == 'true'
+        run: pip install -e ".[anthropic]"
+
+      - name: Reibung finden
+        if: steps.key.outputs.present == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TARGET: ${{ vars.SYNTHPANEL_TARGET || 'README.md' }}
+          AUDIENCE: ${{ vars.SYNTHPANEL_AUDIENCE || 'Besucher:innen der Projektseite' }}
+        run: |
+          synthpanel run "$TARGET" \
+            --backend anthropic \
+            --audience "$AUDIENCE" \
+            --markdown comment.md \
+            --yes
+
+      - name: Als PR-Kommentar posten
+        if: steps.key.outputs.present == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment "${{ github.event.pull_request.number }}" --body-file comment.md
