@@ -176,12 +176,12 @@ def render(syn: Synthesis, title: str, use_rich: bool = True) -> None:
     print(render_plain(syn, title))
 
 
-def _render_rich(syn: Synthesis, title: str) -> None:
+def _render_rich(syn: Synthesis, title: str, console=None) -> None:
     from rich.console import Console
     from rich.panel import Panel
     from rich.table import Table
 
-    console = Console()
+    console = console or Console()
     total = syn.coverage.total
 
     console.print(

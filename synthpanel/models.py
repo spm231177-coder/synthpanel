@@ -11,7 +11,7 @@ import urllib.error
 import urllib.request
 
 OLLAMA_URL = os.environ.get("SYNTHPANEL_OLLAMA_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.environ.get("SYNTHPANEL_OLLAMA_MODEL", "qwen3.5:4b")
+OLLAMA_MODEL = os.environ.get("SYNTHPANEL_OLLAMA_MODEL", "llama3.2:3b")
 ANTHROPIC_MODEL = os.environ.get("SYNTHPANEL_ANTHROPIC_MODEL", "claude-haiku-4-5-20251001")
 
 

@@ -31,7 +31,7 @@ Dazu ein **Dissens-Teil** (wichtige Einzelstimmen, die nicht weggemittelt werden
 
 ```
 pip install pyyaml rich pydantic
-ollama pull qwen3.5:4b
+ollama pull llama3.2:3b
 python -m synthpanel run mein_text.md --audience "wen du erreichen willst"
 ```
 

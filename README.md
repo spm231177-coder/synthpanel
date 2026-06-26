@@ -5,6 +5,8 @@ einen Pitch, ein App-Konzept, einen Store-Text — und ein Schwarm diverser Test
 ("Lenses") sagt dir, **woran echte Menschen stolpern würden**: jede Reibung mit Zitat
 der auslösenden Stelle, sortiert nach Schwere.
 
+![SynthPanel Beispiel-Report](assets/example_report.svg)
+
 > **Was es ist:** ein **Such-Werkzeug** — es findet blinde Flecken, die du selbst
 > übersiehst.
 > **Was es nicht ist:** ein Mess-Werkzeug. Es behauptet keine Prozente, keine
@@ -21,7 +23,7 @@ der auslösenden Stelle, sortiert nach Schwere.
 ```bash
 git clone https://github.com/spm231177-coder/synthpanel && cd synthpanel
 pip install -e .              # installiert Abhängigkeiten + den Befehl `synthpanel`
-ollama pull qwen3.5:4b        # oder ein beliebiges anderes Instruct-Modell
+ollama pull llama3.2:3b       # kleines Standard-Modell, läuft überall
 
 synthpanel run examples/landingpage_demo.md \
     --audience "Menschen, die sich schwer konzentrieren können" \
@@ -30,9 +32,10 @@ synthpanel run examples/landingpage_demo.md \
 
 (Ohne Installation geht auch `python -m synthpanel run …` direkt aus dem Repo.)
 
-**Modellwahl = Analysetiefe.** Ein kleines 3B-Modell (`llama3.2:3b`) ist schnell, aber
-oberflächlich; ein 4B+-Modell (`qwen3.5:4b`, Default) oder Anthropic Haiku liefert
-deutlich gehaltvollere Reibung. Das genutzte Modell steht im Report — keine Black Box.
+**Modellwahl = Analysetiefe.** Default ist `llama3.2:3b` — klein, schnell, läuft überall,
+aber eher oberflächlich. Für gehaltvollere Reibung ein größeres lokales Modell
+(`--model qwen2.5:7b`) oder die Cloud (`--backend anthropic`, Claude). Das genutzte
+Modell steht im Report — keine Black Box.
 
 ### So sieht der Output aus
 
